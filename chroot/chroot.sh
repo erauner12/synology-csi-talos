@@ -5,8 +5,9 @@ DIR="/host" # csi-node mount / of the node to /host in the container
 BIN="$(basename "$0")"
 
 if [ -d "$DIR" ]; then
-    exec chroot $DIR /usr/bin/env -i PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" "$BIN" "$@"
+    echo "entering nsenter" # env is not available in Talos, because there aren't any shells
+    nsenter --mount="/proc/${iscsid_pid}/ns/mnt" --net="/proc/${iscsid_pid}/ns/net" -- "/usr/local/sbin/$BIN" "$@"
 fi
 
-echo -n "Couldn't find hostPath: $DIR in the CSI container"
+echo -n "Couldn't find hostPath: $DIR in the CSI container /usr/local/sbin/$BIN $@"
 exit 1
