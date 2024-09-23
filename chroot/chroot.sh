@@ -8,7 +8,7 @@ iscsid_pid=$(pgrep iscsid)
 if [ -d "$DIR" ]; then
     echo "entering nsenter" # env is not available in Talos, because there aren't any shells
     nsenter --mount="/proc/${iscsid_pid}/ns/mnt" --net="/proc/${iscsid_pid}/ns/net" -- "/usr/local/sbin/$BIN" "$@"
+else
+    echo -n "Couldn't find hostPath: $DIR in the CSI container /usr/local/sbin/$BIN $@"
+    exit 1
 fi
-
-echo -n "Couldn't find hostPath: $DIR in the CSI container /usr/local/sbin/$BIN $@"
-exit 1
