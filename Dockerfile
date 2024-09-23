@@ -1,7 +1,7 @@
 # Copyright 2021 Synology Inc.
 
 ############## Build stage ##############
-FROM golang:1.21.4-alpine as builder
+FROM docker.io/golang:1.21.4-alpine as builder
 LABEL stage=synobuilder
 
 RUN apk add --no-cache alpine-sdk
@@ -20,7 +20,7 @@ RUN env GOARCH=$(echo "$TARGETPLATFORM" | cut -f2 -d/) \
         make
 
 ############## Final stage ##############
-FROM alpine:latest
+FROM docker.io/alpine:latest
 LABEL maintainers="Synology Authors" \
       description="Synology CSI Plugin"
 
