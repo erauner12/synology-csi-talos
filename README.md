@@ -21,7 +21,7 @@ metadata:
 Driver Name: csi.san.synology.com
 | Driver Version                                                                   | Image                                                                 | Supported K8s Version |
 | -------------------------------------------------------------------------------- | --------------------------------------------------------------------- | --------------------- |
-| [v1.2.0](https://github.com/SynologyOpenSource/synology-csi/tree/release-v1.2.0) | [synology-csi:v1.2.0](https://hub.docker.com/r/synology/synology-csi) | 1.20+                 |
+| [v1.2.0](https://github.com/SynologyOpenSource/synology-csi/tree/release-v1.2.0) | [synology-csi:v1.2.0](https://hub.docker.com/r/dsoderlund/synology-csi-talos) | 1.20+                 |
 
 
 
@@ -64,7 +64,7 @@ The Synology CSI driver supports:
         - *basic*:
             `./scripts/deploy.sh build && ./scripts/deploy.sh install --basic`
 
-        If you don’t need to build the driver locally and want to pull the [image](https://hub.docker.com/r/synology/synology-csi) from Docker instead, run the command as instructed below.
+        If you don’t need to build the driver locally and want to pull the [image](https://hub.docker.com/r/dsoderlund/synology-csi-talos) from Docker instead, run the command as instructed below.
 
         - *full*:
             `./scripts/deploy.sh install --all`

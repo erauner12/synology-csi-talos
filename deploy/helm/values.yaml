@@ -32,7 +32,7 @@ images:
     pullPolicy: IfNotPresent
     tag: v2.6.3
   plugin:
-    image: dsoderlund/synology-csi-talos
+    image: docker.io/dsoderlund/synology-csi-talos
     pullPolicy: IfNotPresent
     # Defaults to {{ $.Chart.AppVersion }} if empty or not present:
     tag: ""
