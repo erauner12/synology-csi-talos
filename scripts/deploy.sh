@@ -21,6 +21,7 @@ csi_install(){
     echo "Deploy Version: $deploy_k8s_version"
 
     kubectl create ns synology-csi
+    kubectl label ns synology-csi pod-security.kubernetes.io/enforce=privileged pod-security.kubernetes.io/enforce-version=latest
     kubectl create secret -n synology-csi generic client-info-secret --from-file="$config_file"
 
     if [ ! -d "$plugin_dir" ]; then
