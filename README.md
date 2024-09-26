@@ -46,6 +46,43 @@ The Synology CSI driver supports:
 3. After you complete the steps below, the *full* deployment of the CSI driver, including the snapshotter, will be installed. If you don’t need the **Snapshot** feature, you can install the *basic* deployment of the CSI driver instead.
 4. talos needs to have the ext-iscsid extension and if you want to use btrfs (for snapshotting for example) you need an additional extension for that
 
+#### Talos settings
+
+I've gotten this to work with this image, which has the btrfs and iscsi-tools plugins as well as qemu agent which you probably don't need.
+
+``` bash
+talosctl upgrade --nodes $someip \
+  --image factory.talos.dev/installer/018aa3e29b1eed6e84bcded84882e5c2b0f13e24998340393d9eb5244efd4520:v1.8.0
+```
+
+After which I updated the talos machine configs on each controlplane node as so:
+
+``` yaml
+version: v1alpha1
+machine:
+  type: controlplane 
+# ... removed for brevity
+    # # Configures the kernel.
+    kernel:
+        # Kernel modules to load.
+        modules:
+            - name: btrfs # Module name.
+```
+
+and on each worker node as so:
+
+``` yaml
+version: v1alpha1
+machine:
+  type: worker 
+# ... removed for brevity
+    # # Configures the kernel.
+    kernel:
+        # Kernel modules to load.
+        modules:
+            - name: btrfs # Module name.
+```
+
 ### Procedure
 1. Clone the git repository. `git clone https://github.com/QuadmanSWE/synology-csi-talos.git`
 2. Enter the directory. `cd synology-csi`
