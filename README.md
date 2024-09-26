@@ -44,7 +44,7 @@ The Synology CSI driver supports:
 1. Before installing the CSI driver, make sure you have created and initialized at least one **storage pool** and one **volume** on your DSM.
 2. Make sure that all the worker nodes in your Kubernetes cluster can connect to your DSM.
 3. After you complete the steps below, the *full* deployment of the CSI driver, including the snapshotter, will be installed. If you don’t need the **Snapshot** feature, you can install the *basic* deployment of the CSI driver instead.
-4. talos needs to have the ext-iscsid extension
+4. talos needs to have the ext-iscsid extension and if you want to use btrfs (for snapshotting for example) you need an additional extension for that
 
 ### Procedure
 1. Clone the git repository. `git clone https://github.com/QuadmanSWE/synology-csi-talos.git`
