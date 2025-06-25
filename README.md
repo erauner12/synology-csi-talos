@@ -295,8 +295,8 @@ If you want to use images you built locally for installation, edit all files und
 - To build the CSI driver, execute `make`.
 - To build the *synocli* dev tool, execute `make synocli`. The output binary will be at `bin/synocli`.
 - To run unit tests, execute `make test`.
-- To build a docker image, run `./scripts/deploy.sh build`.
- Afterwards, run `docker images` to check the newly created image.
+- To build a multi-arch docker image (amd64 and arm64), run `./scripts/deploy.sh build`. This command uses Docker Buildx under the hood.
+  Afterwards, run `docker images` to check the newly created image.
 
 ### Installation
 
