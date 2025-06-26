@@ -6,9 +6,13 @@ IMAGE_VERSION=v1.2.0
 IMAGE_TAG=$(REGISTRY_NAME)/$(IMAGE_NAME):$(IMAGE_VERSION)
 
 # GitHub Container Registry settings
-GITHUB_USER?=erauner
+GITHUB_USER?=erauner12
 GHCR_REGISTRY=ghcr.io
 GHCR_IMAGE_TAG=$(GHCR_REGISTRY)/$(GITHUB_USER)/$(IMAGE_NAME):$(IMAGE_VERSION)
+
+# Default to amd64 only, but allow override
+PLATFORMS?=linux/amd64
+PLATFORMS_MULTIARCH=linux/amd64,linux/arm/v7,linux/arm64
 
 # For now, only build linux/amd64 platform
 ifeq ($(GOARCH),)
@@ -30,18 +34,30 @@ docker-build:
 	docker build -f Dockerfile -t $(IMAGE_TAG) .
 
 docker-build-multiarch:
-	docker buildx build -t $(IMAGE_TAG) --platform linux/amd64,linux/arm/v7,linux/arm64 . --load
+	docker buildx build -t $(IMAGE_TAG) --platform $(PLATFORMS) . --load
 
 docker-build-multiarch-push:
-	docker buildx build -t $(IMAGE_TAG) --platform linux/amd64,linux/arm/v7,linux/arm64 . --push
+	docker buildx build -t $(IMAGE_TAG) --platform $(PLATFORMS) . --push
 
-# Build and push to GitHub Container Registry
+# Build and push to GitHub Container Registry (default: amd64 only)
 docker-build-multiarch-ghcr:
-	docker buildx build -t $(GHCR_IMAGE_TAG) --platform linux/amd64,linux/arm/v7,linux/arm64 . --push
+	docker buildx build -t $(GHCR_IMAGE_TAG) --platform $(PLATFORMS) . --push
 
 # Build locally for GitHub Container Registry (without push)
 docker-build-multiarch-ghcr-local:
-	docker buildx build -t $(GHCR_IMAGE_TAG) --platform linux/amd64,linux/arm/v7,linux/arm64 . --load
+	docker buildx build -t $(GHCR_IMAGE_TAG) --platform $(PLATFORMS) . --load
+
+# Build all architectures
+docker-build-all-arch:
+	docker buildx build -t $(IMAGE_TAG) --platform $(PLATFORMS_MULTIARCH) . --load
+
+# Build and push all architectures
+docker-build-all-arch-push:
+	docker buildx build -t $(IMAGE_TAG) --platform $(PLATFORMS_MULTIARCH) . --push
+
+# Build and push all architectures to GitHub Container Registry
+docker-build-all-arch-ghcr:
+	docker buildx build -t $(GHCR_IMAGE_TAG) --platform $(PLATFORMS_MULTIARCH) . --push
 
 synocli:
 	@mkdir -p bin
