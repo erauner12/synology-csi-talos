@@ -5,6 +5,11 @@ IMAGE_NAME=synology-csi
 IMAGE_VERSION=v1.2.0
 IMAGE_TAG=$(REGISTRY_NAME)/$(IMAGE_NAME):$(IMAGE_VERSION)
 
+# GitHub Container Registry settings
+GITHUB_USER?=erauner
+GHCR_REGISTRY=ghcr.io
+GHCR_IMAGE_TAG=$(GHCR_REGISTRY)/$(GITHUB_USER)/$(IMAGE_NAME):$(IMAGE_VERSION)
+
 # For now, only build linux/amd64 platform
 ifeq ($(GOARCH),)
 GOARCH:=amd64
@@ -25,7 +30,18 @@ docker-build:
 	docker build -f Dockerfile -t $(IMAGE_TAG) .
 
 docker-build-multiarch:
+	docker buildx build -t $(IMAGE_TAG) --platform linux/amd64,linux/arm/v7,linux/arm64 . --load
+
+docker-build-multiarch-push:
 	docker buildx build -t $(IMAGE_TAG) --platform linux/amd64,linux/arm/v7,linux/arm64 . --push
+
+# Build and push to GitHub Container Registry
+docker-build-multiarch-ghcr:
+	docker buildx build -t $(GHCR_IMAGE_TAG) --platform linux/amd64,linux/arm/v7,linux/arm64 . --push
+
+# Build locally for GitHub Container Registry (without push)
+docker-build-multiarch-ghcr-local:
+	docker buildx build -t $(GHCR_IMAGE_TAG) --platform linux/amd64,linux/arm/v7,linux/arm64 . --load
 
 synocli:
 	@mkdir -p bin
